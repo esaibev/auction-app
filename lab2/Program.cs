@@ -1,7 +1,18 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using lab2.Core;
+using lab2.Core.Interfaces;
+using lab2.Persistence;
+using Microsoft.EntityFrameworkCore;
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IAuctionService, AuctionService>();
+builder.Services.AddScoped<IAuctionPersistence, AuctionSqlPersistence>();
+
+// Add db context with dependency injection
+builder.Services.AddDbContext<AuctionDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("AuctionDbConnection")));
 
 var app = builder.Build();
 
