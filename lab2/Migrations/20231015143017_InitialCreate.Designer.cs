@@ -11,7 +11,7 @@ using lab2.Persistence;
 namespace lab2.Migrations
 {
     [DbContext(typeof(AuctionDbContext))]
-    [Migration("20231015101539_InitialCreate")]
+    [Migration("20231015143017_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

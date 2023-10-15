@@ -1,7 +1,9 @@
-﻿using lab2.Core;
+using lab2.Core;
 using lab2.Core.Interfaces;
 using lab2.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using lab2.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,11 @@ builder.Services.AddScoped<IAuctionPersistence, AuctionSqlPersistence>();
 // Add db context with dependency injection
 builder.Services.AddDbContext<AuctionDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("AuctionDbConnection")));
+
+builder.Services.AddDbContext<AuctionAppIdentityContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("AuctionAppIdentityContextConnection")));
+builder.Services.AddDefaultIdentity<AuctionAppUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<AuctionAppIdentityContext>();
 
 var app = builder.Build();
 
@@ -28,6 +35,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();;
 
 app.UseAuthorization();
 
@@ -35,5 +43,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.MapRazorPages();
 app.Run();
 
