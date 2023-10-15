@@ -41,12 +41,12 @@ namespace lab2.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("StartingPrice")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("StartingPrice")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.ToTable("auctionDbs");
+                    b.ToTable("AuctionDbs");
 
                     b.HasData(
                         new
@@ -56,7 +56,7 @@ namespace lab2.Migrations
                             Description = "Test description",
                             EndDate = new DateTime(2023, 12, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Default title",
-                            StartingPrice = 100m
+                            StartingPrice = 125
                         });
                 });
 
@@ -69,7 +69,7 @@ namespace lab2.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AuctionId")
+                    b.Property<int>("AuctionDbId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Bidder")
@@ -82,16 +82,34 @@ namespace lab2.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuctionId");
+                    b.HasIndex("AuctionDbId");
 
-                    b.ToTable("bidDbs");
+                    b.ToTable("BidDbs");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1,
+                            Amount = 150,
+                            AuctionDbId = -1,
+                            Bidder = "SampleBid1",
+                            DateMade = new DateTime(2023, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = -2,
+                            Amount = 170,
+                            AuctionDbId = -1,
+                            Bidder = "SampleBid2",
+                            DateMade = new DateTime(2023, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("lab2.Persistence.BidDb", b =>
                 {
                     b.HasOne("lab2.Persistence.AuctionDb", "AuctionDb")
                         .WithMany("BidDbs")
-                        .HasForeignKey("AuctionId")
+                        .HasForeignKey("AuctionDbId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

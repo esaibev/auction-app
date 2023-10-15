@@ -8,7 +8,7 @@ namespace lab2.Core
 		{
 		}
       
-        public List<Auction> GetAll()
+        public List<Auction> GetAllActive()
         {
             Auction a1 = new Auction(1, "Guitar", "A precious antique guitar", "Esaias", 500, new DateTime(2023,10,25,10,00,00));
             Auction a2 = new Auction(2, "Piano", "Used by Elton John", "Robert", 3000, new DateTime(2023,10,30,15,30,00));
@@ -18,6 +18,11 @@ namespace lab2.Core
             auctions.Add(a1);
             auctions.Add(a2);
             return auctions;
+        }
+
+        public Auction GetAuctionById(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

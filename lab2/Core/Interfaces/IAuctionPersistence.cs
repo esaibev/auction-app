@@ -2,7 +2,8 @@
 {
 	public interface IAuctionPersistence
 	{
-		List<Auction> GetAll();
-	}
+		List<Auction> GetAllActive();
+        Auction GetAuctionById(int id);
+    }
 }
 

@@ -22,7 +22,7 @@ namespace lab2.Controllers
         // GET: Auctions
         public ActionResult Index()
         {
-            List<Auction> auctions = _auctionService.GetAll();
+            List<Auction> auctions = _auctionService.GetAllActive();
             List<AuctionVM> auctionVMs = new();
             foreach (var auction in auctions)
             {
@@ -31,13 +31,15 @@ namespace lab2.Controllers
             return View(auctionVMs);
         }
 
-        /*
         // GET: Auctions/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var auction = _auctionService.GetAuctionById(id);
+            var auctionVM = AuctionVM.FromAuction(auction);
+            return View(auctionVM);
         }
 
+        /*
         // GET: Auctions/Create
         public ActionResult Create()
         {

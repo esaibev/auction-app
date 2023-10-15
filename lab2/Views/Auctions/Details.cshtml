@@ -1,0 +1,28 @@
+﻿@model lab2.ViewModels.AuctionVM
+
+<h1>@Model.Name</h1>
+<p>@Model.Description</p>
+<p>Auctioneer: @Model.Auctioneer</p>
+<p>Starting Price: @Model.StartingPrice</p>
+<p>End Date: @Model.EndDate</p>
+
+<h2>Bids</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Bidder</th>
+            <th>Amount</th>
+            <th>Date Made</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var bid in Model.Bids)
+        {
+            <tr>
+                <td>@bid.Bidder</td>
+                <td>@bid.Amount kr</td>
+                <td>@bid.DateMade</td>
+            </tr>
+        }
+    </tbody>
+</table>

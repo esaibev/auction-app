@@ -22,10 +22,10 @@
                 @Html.DisplayNameFor(model => model.Auctioneer)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StartingPrice)
+                Starting Price
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EndDate)
+                End Date
             </th>
             <th></th>
         </tr>
@@ -44,11 +44,12 @@
                     @Html.DisplayFor(modelItem => item.Auctioneer)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.StartingPrice)
+                    @Html.DisplayFor(modelItem => item.StartingPrice) kr
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.EndDate)
                 </td>
+                <td><a asp-action="Details" asp-route-id="@item.Id">View Details</a></td>
             </tr>
         }
     </tbody>

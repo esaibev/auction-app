@@ -11,9 +11,14 @@ namespace lab2.Core
             _auctionPersistence = auctionPersistence;
         }
 
-        public List<Auction> GetAll()
+        public List<Auction> GetAllActive()
         {
-            return _auctionPersistence.GetAll();
+            return _auctionPersistence.GetAllActive();
+        }
+
+        public Auction GetAuctionById(int id)
+        {
+            return _auctionPersistence.GetAuctionById(id);
         }
     }
 }

@@ -25,7 +25,7 @@ namespace lab2.Persistence
         [DataType(DataType.DateTime)]
         public DateTime EndDate { get; set; }
 
-        public IEnumerable<BidDb> BidDbs { get; set; } = new List<BidDb>();
+        public virtual List<BidDb> BidDbs { get; set; } = new List<BidDb>();
 	}
 }
 

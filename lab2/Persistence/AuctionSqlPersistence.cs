@@ -1,5 +1,7 @@
-﻿using lab2.Core;
+﻿using System.Linq;
+using lab2.Core;
 using lab2.Core.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace lab2.Persistence
 {
@@ -12,9 +14,13 @@ namespace lab2.Persistence
             _dbContext = dbContext;
         }
 
-        public List<Auction> GetAll()
+        public List<Auction> GetAllActive()
         {
-            var auctionDbs = _dbContext.AuctionDbs.ToList();
+            var auctionDbs = _dbContext.AuctionDbs
+                .Where(a => a.EndDate >= DateTime.Now)
+                .OrderBy(a => a.EndDate)
+                .ToList();
+                
             List<Auction> result = new List<Auction>();
 
             foreach (AuctionDb adb in auctionDbs)
@@ -27,15 +33,37 @@ namespace lab2.Persistence
                     adb.StartingPrice,
                     adb.EndDate);
 
-                foreach (BidDb bid in adb.BidDbs)
-                {
-                    auction.addBid(new Bid(
-                        bid.Id, bid.Bidder, bid.Amount, bid.DateMade));
-                }
-
                 result.Add(auction);
             }
             return result;
+        }
+
+        public Auction GetAuctionById(int id)
+        {
+            var adb = _dbContext.AuctionDbs
+                .Include(a => a.BidDbs)
+                .Where(a => a.Id == id)
+                .SingleOrDefault();
+
+            if (adb == null) return null;
+
+            adb.BidDbs = adb.BidDbs.OrderByDescending(b => b.Amount).ToList();
+
+            Auction auction = new Auction(
+                adb.Id,
+                adb.Name,
+                adb.Description,
+                adb.Auctioneer,
+                adb.StartingPrice,
+                adb.EndDate);
+
+            foreach (BidDb bid in adb.BidDbs)
+            {
+                auction.addBid(new Bid(
+                    bid.Id, bid.Bidder, bid.Amount, bid.DateMade));
+            }
+
+            return auction;
         }
     }
 }

@@ -19,10 +19,10 @@ namespace lab2.Persistence
         [DataType(DataType.DateTime)]
         public DateTime DateMade { get; set; }
 
-        [ForeignKey("AuctionId")]
-        public AuctionDb AuctionDb { get; set; }
+        [ForeignKey("AuctionDbId")]
+        public virtual AuctionDb AuctionDb { get; set; }
 
-        public int AuctionId { get; set; }
+        public int AuctionDbId { get; set; }
 	}
 }
 

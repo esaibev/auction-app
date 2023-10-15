@@ -10,6 +10,12 @@ namespace lab2.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Define the relationship between AuctionDb and BidDb
+            modelBuilder.Entity<AuctionDb>()
+                        .HasMany(a => a.BidDbs)
+                        .WithOne(b => b.AuctionDb)
+                        .HasForeignKey(b => b.AuctionDbId);
+
             modelBuilder.Entity<AuctionDb>().HasData(
                 new AuctionDb
                 {
@@ -17,20 +23,29 @@ namespace lab2.Persistence
                     Name = "Default title",
                     Description = "Test description",
                     Auctioneer = "Foo",
-                    StartingPrice = 100,
+                    StartingPrice = 125,
                     EndDate = new DateTime(2023,12,21),
-                    BidDbs = new List<BidDb>()
                 });
 
             BidDb bid1 = new BidDb()
             {
                 Id = -1,
-                Bidder = "FooBidder",
+                Bidder = "SampleBid1",
                 Amount = 150,
                 DateMade = new DateTime(2023, 10, 14),
-                AuctionId = -1
+                AuctionDbId = -1
             };
-            modelBuilder.Entity<BidDb>().HasData(bid1);
+
+            BidDb bid2 = new BidDb()
+            {
+                Id = -2,
+                Bidder = "SampleBid2",
+                Amount = 170,
+                DateMade = new DateTime(2023, 10, 15),
+                AuctionDbId = -1
+            };
+
+            modelBuilder.Entity<BidDb>().HasData(bid1, bid2);
         }
     }
 }
