@@ -1,5 +1,4 @@
 ﻿using lab2.Core;
-using lab2.Persistence;
 
 namespace lab2.ViewModels
 {
@@ -11,6 +10,7 @@ namespace lab2.ViewModels
         public string Auctioneer { get; set; }
         public int StartingPrice { get; set; }
         public DateTime EndDate { get; set; }
+
         public bool IsCompleted { get; set; }
         public List<BidVM> Bids { get; set; } = new List<BidVM>();
 
@@ -25,7 +25,7 @@ namespace lab2.ViewModels
                 StartingPrice = auction.StartingPrice,
                 EndDate = auction.EndDate,
                 IsCompleted = auction.isCompleted()
-            };
+            };  
 
             foreach(var bid in auction.Bids)
             {

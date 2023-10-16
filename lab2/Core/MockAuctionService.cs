@@ -7,7 +7,12 @@ namespace lab2.Core
 		public MockAuctionService()
 		{
 		}
-      
+
+        public void AddAuction(Auction auction)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Auction> GetAllActive()
         {
             Auction a1 = new Auction(1, "Guitar", "A precious antique guitar", "Esaias", 500, new DateTime(2023,10,25,10,00,00));

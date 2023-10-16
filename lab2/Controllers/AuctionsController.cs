@@ -41,7 +41,7 @@ namespace lab2.Controllers
             return View(auctionVM);
         }
 
-        /*
+        
         // GET: Auctions/Create
         public ActionResult Create()
         {
@@ -51,20 +51,31 @@ namespace lab2.Controllers
         // POST: Auctions/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(CreateAuctionVM vm)
         {
-            try
+            if (vm.EndDate <= DateTime.Now)
             {
-                // TODO: Add insert logic here
+                ModelState.AddModelError("EndDate", "End date must be in the future.");
+            }
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
+            if (ModelState.IsValid)
             {
-                return View();
+                Auction auction = new Auction()
+                {
+                    Name = vm.Name,
+                    Description = vm.Description,
+                    StartingPrice = vm.StartingPrice,
+                    EndDate = vm.EndDate,
+                    Auctioneer = User.Identity.Name
+                };
+                
+                _auctionService.AddAuction(auction);
+                return RedirectToAction("Index");
             }
+            return View(vm);
         }
 
+        /*
         // GET: Auctions/Edit/5
         public ActionResult Edit(int id)
         {

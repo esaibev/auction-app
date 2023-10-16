@@ -23,14 +23,10 @@
 		}
 
         public Auction(int id, string name, string auctioneer, int startingPrice, DateTime endDate)
-        {
-            Id = id;
-            Name = name;
-			Description = "";
-            Auctioneer = auctioneer;
-            StartingPrice = startingPrice;
-            EndDate = endDate;
-        }
+			: this(id, name, "", auctioneer, startingPrice, endDate)
+        { }
+
+		public Auction () {}
 
         public void addBid(Bid bid)
 		{

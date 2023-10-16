@@ -11,6 +11,14 @@ namespace lab2.Core
             _auctionPersistence = auctionPersistence;
         }
 
+        public void AddAuction(Auction auction)
+        {
+            // Id should be 0 since db handles it
+            if (auction == null || auction.Id != 0 || auction.EndDate <= DateTime.Now) throw new InvalidDataException();
+
+            _auctionPersistence.AddAuction(auction);
+        }
+
         public List<Auction> GetAllActive()
         {
             return _auctionPersistence.GetAllActive();

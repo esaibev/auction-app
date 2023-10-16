@@ -4,6 +4,7 @@
 	{
 		List<Auction> GetAllActive();
 		Auction GetAuctionById(int id);
+		void AddAuction(Auction auction);
 	}
 }
 

@@ -19,7 +19,9 @@ namespace lab2.Persistence
 
         public void AddAuction(Auction auction)
         {
-            throw new NotImplementedException();
+            AuctionDb adb = _mapper.Map<AuctionDb>(auction);
+            _dbContext.AuctionDbs.Add(adb);
+            _dbContext.SaveChanges();
         }
 
         public List<Auction> GetAllActive()
@@ -31,12 +33,16 @@ namespace lab2.Persistence
                 
             List<Auction> result = new List<Auction>();
 
+
             foreach (AuctionDb adb in auctionDbs)
             {
                 Auction auction = _mapper.Map<Auction>(adb);
                 result.Add(auction);
             }
             return result;
+
+            // Or simply
+            //return _mapper.Map<List<Auction>>(auctionDbs)
         }
 
         public Auction GetAuctionById(int id)
