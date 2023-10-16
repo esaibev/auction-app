@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using lab2.Core;
 using lab2.Core.Interfaces;
 using lab2.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace lab2.Controllers
 {
+    [Authorize]
     public class AuctionsController : Controller
     {
         private readonly IAuctionService _auctionService;

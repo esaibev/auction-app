@@ -16,10 +16,14 @@ builder.Services.AddScoped<IAuctionPersistence, AuctionSqlPersistence>();
 builder.Services.AddDbContext<AuctionDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("AuctionDbConnection")));
 
+// Add configurations for Identity
 builder.Services.AddDbContext<AuctionAppIdentityContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("AuctionAppIdentityContextConnection")));
 builder.Services.AddDefaultIdentity<AuctionAppUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<AuctionAppIdentityContext>();
+
+// Add scanning of AutoMapper
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 

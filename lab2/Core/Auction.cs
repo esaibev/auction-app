@@ -22,6 +22,16 @@
 			EndDate = endDate;
 		}
 
+        public Auction(int id, string name, string auctioneer, int startingPrice, DateTime endDate)
+        {
+            Id = id;
+            Name = name;
+			Description = "";
+            Auctioneer = auctioneer;
+            StartingPrice = startingPrice;
+            EndDate = endDate;
+        }
+
         public void addBid(Bid bid)
 		{
 			_bids.Add(bid);

@@ -20,9 +20,9 @@ namespace lab2.Persistence
                 new AuctionDb
                 {
                     Id = -1,
-                    Name = "Default title",
-                    Description = "Test description",
-                    Auctioneer = "Foo",
+                    Name = "Guitar",
+                    Description = "An antique guitar",
+                    Auctioneer = "esaiasb@kth.se",
                     StartingPrice = 125,
                     EndDate = new DateTime(2023,12,21),
                 });
@@ -30,7 +30,7 @@ namespace lab2.Persistence
             BidDb bid1 = new BidDb()
             {
                 Id = -1,
-                Bidder = "SampleBid1",
+                Bidder = "foo@mail.com",
                 Amount = 150,
                 DateMade = new DateTime(2023, 10, 14),
                 AuctionDbId = -1
@@ -39,14 +39,34 @@ namespace lab2.Persistence
             BidDb bid2 = new BidDb()
             {
                 Id = -2,
-                Bidder = "SampleBid2",
+                Bidder = "testUser@mail.com",
                 Amount = 170,
                 DateMade = new DateTime(2023, 10, 15),
                 AuctionDbId = -1
             };
 
             modelBuilder.Entity<BidDb>().HasData(bid1, bid2);
+
+            var auction2 = new AuctionDb
+            {
+                Id = -2,
+                Name = "Piano",
+                Description = "Belonged to Elton John",
+                Auctioneer = "foo@mail.com",
+                StartingPrice = 500,
+                EndDate = new DateTime(2023, 10, 15),
+            };
+
+            var auction3 = new AuctionDb
+            {
+                Id = -3,
+                Name = "Saxophone",
+                Description = "In good condition",
+                Auctioneer = "foo@mail.com",
+                StartingPrice = 300,
+                EndDate = new DateTime(2023, 12, 15),
+            };
+            modelBuilder.Entity<AuctionDb>().HasData(auction2, auction3);
         }
     }
 }
-

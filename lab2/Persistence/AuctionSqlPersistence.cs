@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using AutoMapper;
 using lab2.Core;
 using lab2.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +9,17 @@ namespace lab2.Persistence
     public class AuctionSqlPersistence : IAuctionPersistence
     {
         private AuctionDbContext _dbContext;
+        private IMapper _mapper;
 
-        public AuctionSqlPersistence(AuctionDbContext dbContext)
+        public AuctionSqlPersistence(AuctionDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
+        }
+
+        public void AddAuction(Auction auction)
+        {
+            throw new NotImplementedException();
         }
 
         public List<Auction> GetAllActive()
@@ -25,14 +33,7 @@ namespace lab2.Persistence
 
             foreach (AuctionDb adb in auctionDbs)
             {
-                Auction auction = new Auction(
-                    adb.Id,
-                    adb.Name,
-                    adb.Description,
-                    adb.Auctioneer,
-                    adb.StartingPrice,
-                    adb.EndDate);
-
+                Auction auction = _mapper.Map<Auction>(adb);
                 result.Add(auction);
             }
             return result;
@@ -48,19 +49,11 @@ namespace lab2.Persistence
             if (adb == null) return null;
 
             adb.BidDbs = adb.BidDbs.OrderByDescending(b => b.Amount).ToList();
+            Auction auction = _mapper.Map<Auction>(adb);
 
-            Auction auction = new Auction(
-                adb.Id,
-                adb.Name,
-                adb.Description,
-                adb.Auctioneer,
-                adb.StartingPrice,
-                adb.EndDate);
-
-            foreach (BidDb bid in adb.BidDbs)
+            foreach (BidDb bidDb in adb.BidDbs)
             {
-                auction.addBid(new Bid(
-                    bid.Id, bid.Bidder, bid.Amount, bid.DateMade));
+                auction.addBid(_mapper.Map<Bid>(bidDb));
             }
 
             return auction;

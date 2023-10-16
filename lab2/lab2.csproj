@@ -12,6 +12,7 @@
     <None Remove="ViewModels\" />
     <None Remove="Persistence\" />
     <None Remove="Views\Auctions\" />
+    <None Remove="Mappings\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\" />
@@ -19,6 +20,7 @@
     <Folder Include="ViewModels\" />
     <Folder Include="Persistence\" />
     <Folder Include="Views\Auctions\" />
+    <Folder Include="Mappings\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.10" />
@@ -35,5 +37,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
   </ItemGroup>
 </Project>

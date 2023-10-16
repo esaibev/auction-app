@@ -27,7 +27,11 @@ namespace lab2.ViewModels
                 IsCompleted = auction.isCompleted()
             };
 
-            auctionVM.Bids = auction.Bids.Select(bid => BidVM.FromBid(bid)).ToList();
+            foreach(var bid in auction.Bids)
+            {
+                auctionVM.Bids.Add(BidVM.FromBid(bid));
+            }
+
             return auctionVM;
         }
     }
