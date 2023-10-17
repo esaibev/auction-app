@@ -37,6 +37,18 @@
 		{
 			return DateTime.Now >= EndDate;
 		}
-	}
+
+        public bool BidIsValid(int amount)
+        {
+			if (amount < StartingPrice) return false;
+			int currentHighestBid = -1;
+			foreach (Bid bid in _bids)
+			{
+				if (bid.Amount > currentHighestBid)
+					currentHighestBid = bid.Amount;
+			}
+			return amount > currentHighestBid;
+        }
+    }
 }
 

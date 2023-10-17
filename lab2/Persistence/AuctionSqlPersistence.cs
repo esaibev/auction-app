@@ -54,6 +54,25 @@ namespace lab2.Persistence
             return auction;
         }
 
+        public void MakeBid(Auction auction)
+        {
+            var adb = _dbContext.AuctionDbs
+                .Include(a => a.BidDbs)
+                .Where(a => a.Id == auction.Id)
+                .SingleOrDefault();
+
+            if (adb != null)
+            {
+                _mapper.Map(auction, adb);
+                var newBid = auction.Bids.Last();
+                var newBidDb = _mapper.Map<BidDb>(newBid);
+                adb.BidDbs.Add(newBidDb);
+                _dbContext.SaveChanges();
+            }
+            else throw new ArgumentException("Auction id " + auction.Id +
+                " cannot be found in the database.");
+        }
+
         public void UpdateAuction(Auction auction)
         {
             var adb = _dbContext.AuctionDbs.Find(auction.Id);

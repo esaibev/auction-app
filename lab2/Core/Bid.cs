@@ -14,6 +14,8 @@
             Amount = amount;
             DateMade = dateMade;
         }
+
+        public Bid() { }
     }
 }
 

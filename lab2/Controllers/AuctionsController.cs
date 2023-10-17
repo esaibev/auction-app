@@ -8,6 +8,7 @@ using lab2.Core;
 using lab2.Core.Interfaces;
 using lab2.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using lab2.Persistence;
 
 namespace lab2.Controllers
 {
@@ -104,6 +105,40 @@ namespace lab2.Controllers
                 return RedirectToAction(nameof(Details), new { id = auction.Id });
             }
             return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult MakeBid(int AuctionId, int BidAmount)
+        {
+            var auction = _auctionService.GetAuctionById(AuctionId);
+
+            if (auction == null)
+            {
+                return NotFound("Auction not found.");
+            }
+
+            if (auction.Auctioneer.Equals(User.Identity.Name))
+            {
+                return BadRequest("Cannot bid on your own auction.");
+            }
+
+            if (!auction.BidIsValid(BidAmount))
+            {
+                return BadRequest("Bid amount must be higher than the starting price and the current highest bid.");
+            }
+
+            Bid bid = new Bid()
+            {
+                Bidder = User.Identity.Name,
+                Amount = BidAmount,
+                DateMade = DateTime.Now,
+
+            };
+
+            auction.addBid(bid);
+            _auctionService.MakeBid(auction);
+            return RedirectToAction(nameof(Details), new { id = auction.Id });
         }
 
         /*

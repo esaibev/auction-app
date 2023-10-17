@@ -18,6 +18,17 @@
 </div>
 
 <h2>Bids</h2>
+@if (!User.Identity.Name.Equals(Model.Auctioneer))
+{
+    <form asp-action="MakeBid" method="post" style="margin-top: 1rem; margin-bottom: 0.75rem">
+        <input type="hidden" name="AuctionId" value="@Model.Id" />
+        <div class="form-group">
+            <input type="number" id="BidAmount" name="BidAmount" class="form-control" style="width: auto" placeholder="Input your bid" />
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-top: 0.75rem">Make Bid</button>
+    </form>
+    //<button class="btn btn-primary" style="margin-top: 0.25rem; margin-bottom: 0.75rem">Make Bid</button>
+}
 <table class="table">
     <thead>
         <tr>
