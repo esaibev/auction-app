@@ -41,7 +41,6 @@ namespace lab2.Controllers
             return View(auctionVM);
         }
 
-        
         // GET: Auctions/Create
         public ActionResult Create()
         {
@@ -75,30 +74,39 @@ namespace lab2.Controllers
             return View(vm);
         }
 
-        /*
         // GET: Auctions/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var auction = _auctionService.GetAuctionById(id);
+
+            if(!auction.Auctioneer.Equals(User.Identity.Name))
+                return Unauthorized();
+
+            var editAuctionVM = EditAuctionVM.FromAuction(auction);
+            return View(editAuctionVM);
         }
 
         // POST: Auctions/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, EditAuctionVM vm)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
+                var auction = _auctionService.GetAuctionById(id);
 
-                return RedirectToAction(nameof(Index));
+                if (!auction.Auctioneer.Equals(User.Identity.Name))
+                    return Unauthorized();
+
+                auction.Description = vm.Description;
+                _auctionService.UpdateAuction(auction);
+
+                return RedirectToAction(nameof(Details), new { id = auction.Id });
             }
-            catch
-            {
-                return View();
-            }
+            return View(vm);
         }
 
+        /*
         // GET: Auctions/Delete/5
         public ActionResult Delete(int id)
         {

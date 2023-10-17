@@ -30,19 +30,8 @@ namespace lab2.Persistence
                 .Where(a => a.EndDate >= DateTime.Now)
                 .OrderBy(a => a.EndDate)
                 .ToList();
-                
-            List<Auction> result = new List<Auction>();
 
-
-            foreach (AuctionDb adb in auctionDbs)
-            {
-                Auction auction = _mapper.Map<Auction>(adb);
-                result.Add(auction);
-            }
-            return result;
-
-            // Or simply
-            //return _mapper.Map<List<Auction>>(auctionDbs)
+            return _mapper.Map<List<Auction>>(auctionDbs);
         }
 
         public Auction GetAuctionById(int id)
@@ -63,6 +52,18 @@ namespace lab2.Persistence
             }
 
             return auction;
+        }
+
+        public void UpdateAuction(Auction auction)
+        {
+            var adb = _dbContext.AuctionDbs.Find(auction.Id);
+            if (adb != null)
+            {
+                _mapper.Map(auction, adb);
+                _dbContext.SaveChanges();
+            }
+            else throw new ArgumentException("Auction id " + auction.Id +
+                " cannot be found in the database.");
         }
     }
 }

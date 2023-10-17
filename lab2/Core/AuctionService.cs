@@ -28,6 +28,12 @@ namespace lab2.Core
         {
             return _auctionPersistence.GetAuctionById(id);
         }
+
+        public void UpdateAuction(Auction auction)
+        {
+            if (auction == null) throw new InvalidDataException();
+            _auctionPersistence.UpdateAuction(auction);
+        }
     }
 }
 

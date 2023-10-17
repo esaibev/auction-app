@@ -2,7 +2,7 @@
 
 namespace lab2.Core
 {
-	public class MockAuctionService : IAuctionService
+	public class MockAuctionService //: IAuctionService
 	{
 		public MockAuctionService()
 		{

@@ -1,11 +1,20 @@
 ﻿@model lab2.ViewModels.AuctionVM
 
+@{
+    ViewData["Title"] = Model.Name;
+}
+
 <div style="margin-bottom: 2rem">
     <h1>@Model.Name</h1>
-    <p>@Model.Description</p>
-    <p>Auctioneer: @Model.Auctioneer</p>
-    <p>Starting Price: @Model.StartingPrice</p>
-    <p>End Date: @Model.EndDate</p>
+    <p><a asp-action="Index">Back to Index</a></p>
+    <p><strong>Description:</strong> @Model.Description</p>
+    <p><strong>Auctioneer:</strong> @Model.Auctioneer</p>
+    <p><strong>Starting Price:</strong> @Model.StartingPrice kr</p>
+    <p><strong>End Date:</strong> @Model.EndDate</p>
+    @if (User.Identity.Name == Model.Auctioneer)
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit Description</a>
+    }
 </div>
 
 <h2>Bids</h2>
