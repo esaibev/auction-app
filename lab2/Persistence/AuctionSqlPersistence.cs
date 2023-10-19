@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using lab2.Core;
 using lab2.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +21,27 @@ namespace lab2.Persistence
             AuctionDb adb = _mapper.Map<AuctionDb>(auction);
             _dbContext.AuctionDbs.Add(adb);
             _dbContext.SaveChanges();
+        }
+
+        public List<Auction> GetActiveAuctionsByBidder(string bidderName)
+        {
+            var auctionsBidderParticipated = _dbContext.AuctionDbs
+                .Where(a => a.EndDate >= DateTime.Now && a.BidDbs.Any(b => b.Bidder == bidderName))
+                .Include(a => a.BidDbs)
+                .OrderBy(a => a.EndDate)
+                .ToList();
+
+            List<Auction> auctions = new();
+
+            foreach (var auctionDb in auctionsBidderParticipated)
+            {
+                Auction auction = _mapper.Map<Auction>(auctionDb);
+                IEnumerable<Bid> bids = auctionDb.BidDbs.Select(_mapper.Map<Bid>);
+                auction.AddBids(bids);
+                auctions.Add(auction);
+            }
+
+            return auctions;
         }
 
         public List<Auction> GetAllActive()

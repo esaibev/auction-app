@@ -28,7 +28,17 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Auctions" asp-action="Index">Auctions</a>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" id="myAuctionsDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                My Auctions
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="myAuctionsDropdown">
+                                <a class="dropdown-item" asp-controller="Auctions" asp-action="ActiveBids">Active Bids</a>
+                                <a class="dropdown-item" asp-controller="Auctions" asp-action="WonAuctions">Won Auctions</a>
+                            </div>
+                        </li>
                     </ul>
+
                     <partial name="_LoginPartial" />
                 </div>
             </div>

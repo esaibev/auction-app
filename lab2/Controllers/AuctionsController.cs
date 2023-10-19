@@ -39,6 +39,12 @@ namespace lab2.Controllers
         {
             var auction = _auctionService.GetAuctionById(id);
             var auctionVM = AuctionVM.FromAuction(auction);
+
+            // Show error if bid input is invalid
+            if (TempData["BidErrorMessage"] != null)
+            {
+                ModelState.AddModelError("", TempData["BidErrorMessage"].ToString());
+            }
             return View(auctionVM);
         }
 
@@ -109,9 +115,9 @@ namespace lab2.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult MakeBid(int AuctionId, int BidAmount)
+        public ActionResult MakeBid(int auctionId, int bidAmount)
         {
-            var auction = _auctionService.GetAuctionById(AuctionId);
+            var auction = _auctionService.GetAuctionById(auctionId);
 
             if (auction == null)
             {
@@ -123,15 +129,16 @@ namespace lab2.Controllers
                 return BadRequest("Cannot bid on your own auction.");
             }
 
-            if (!auction.BidIsValid(BidAmount))
+            if (!auction.BidIsValid(bidAmount))
             {
-                return BadRequest("Bid amount must be higher than the starting price and the current highest bid.");
+                TempData["BidErrorMessage"] = "Bid amount must be higher than the starting price and the current highest bid.";
+                return RedirectToAction(nameof(Details), new { id = auctionId });
             }
 
             Bid bid = new Bid()
             {
                 Bidder = User.Identity.Name,
-                Amount = BidAmount,
+                Amount = bidAmount,
                 DateMade = DateTime.Now,
 
             };
@@ -139,6 +146,18 @@ namespace lab2.Controllers
             auction.addBid(bid);
             _auctionService.MakeBid(auction);
             return RedirectToAction(nameof(Details), new { id = auction.Id });
+        }
+
+        // GET: Auctions/ActiveBids
+        public ActionResult ActiveBids()
+        {
+            List<Auction> auctions = _auctionService.GetActiveAuctionsByBidder(User.Identity.Name);
+            List<AuctionVM> auctionVMs = new();
+            foreach (var auction in auctions)
+            {
+                auctionVMs.Add(AuctionVM.FromAuction(auction));
+            }
+            return View(auctionVMs);
         }
 
         /*

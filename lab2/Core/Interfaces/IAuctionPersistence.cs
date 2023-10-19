@@ -7,6 +7,7 @@
 		void AddAuction(Auction auction);
         void UpdateAuction(Auction auction);
         void MakeBid(Auction auction);
+        List<Auction> GetActiveAuctionsByBidder(string bidderName);
     }
 }
 

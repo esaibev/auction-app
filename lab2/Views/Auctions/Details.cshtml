@@ -4,6 +4,13 @@
     ViewData["Title"] = Model.Name;
 }
 
+<style>
+    .validation-summary-errors ul, .validation-summary-errors li {
+        list-style: none;
+        padding: 0;
+    }
+</style>
+
 <div style="margin-bottom: 2rem">
     <h1>@Model.Name</h1>
     <p><a asp-action="Index">Back to Index</a></p>
@@ -25,8 +32,9 @@
         <div class="form-group">
             <input type="number" id="BidAmount" name="BidAmount" class="form-control" style="width: auto" placeholder="Input your bid" />
         </div>
-        <button type="submit" class="btn btn-primary" style="margin-top: 0.75rem">Make Bid</button>
+        <button type="submit" class="btn btn-primary" style="margin-top: 1rem">Make Bid</button>
     </form>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     //<button class="btn btn-primary" style="margin-top: 0.25rem; margin-bottom: 0.75rem">Make Bid</button>
 }
 <table class="table">

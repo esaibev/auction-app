@@ -19,6 +19,12 @@ namespace lab2.Core
             _auctionPersistence.AddAuction(auction);
         }
 
+        public List<Auction> GetActiveAuctionsByBidder(string bidderName)
+        {
+            if (bidderName == null) throw new InvalidDataException();
+            return _auctionPersistence.GetActiveAuctionsByBidder(bidderName);
+        }
+
         public List<Auction> GetAllActive()
         {
             return _auctionPersistence.GetAllActive();

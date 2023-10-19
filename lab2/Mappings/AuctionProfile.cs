@@ -10,7 +10,11 @@ namespace lab2.Mappings
 		{
 			CreateMap<AuctionDb, Auction>()
 				.ReverseMap();
-		}
+
+    //        CreateMap<AuctionDb, Auction>()
+				//.ForMember(dest => dest.Bids, opt => opt.MapFrom(src => src.BidDbs))
+				//.ReverseMap();
+        }
 	}
 }
 

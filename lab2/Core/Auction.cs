@@ -33,7 +33,15 @@
 			_bids.Add(bid);
 		}
 
-		public bool isCompleted()
+        public void AddBids(IEnumerable<Bid> bids)
+        {
+            foreach (var bid in bids)
+            {
+                addBid(bid);
+            }
+        }
+
+        public bool isCompleted()
 		{
 			return DateTime.Now >= EndDate;
 		}
