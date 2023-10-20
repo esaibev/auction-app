@@ -47,7 +47,11 @@
                     @Html.DisplayFor(modelItem => item.StartingPrice) kr
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.HighestBid) kr
+                    @if (item.HighestBid != 0)
+                    {
+                        @Html.DisplayFor(modelItem => item.HighestBid)
+                        @:kr
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.EndDate)

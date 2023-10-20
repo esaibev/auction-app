@@ -25,6 +25,9 @@
                 Starting Price
             </th>
             <th>
+                Highest Bid
+            </th>
+            <th>
                 End Date
             </th>
             <th></th>
@@ -45,6 +48,13 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.StartingPrice) kr
+                </td>
+                <td>
+                    @if (item.HighestBid != 0)
+                    {
+                        @Html.DisplayFor(modelItem => item.HighestBid)
+                        @:kr
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.EndDate)

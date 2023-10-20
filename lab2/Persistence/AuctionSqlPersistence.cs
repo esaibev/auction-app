@@ -48,10 +48,20 @@ namespace lab2.Persistence
         {
             var auctionDbs = _dbContext.AuctionDbs
                 .Where(a => a.EndDate >= DateTime.Now)
+                .Include(a => a.BidDbs)
                 .OrderBy(a => a.EndDate)
                 .ToList();
 
-            return _mapper.Map<List<Auction>>(auctionDbs);
+            List<Auction> auctions = new();
+
+            foreach (var auctionDb in auctionDbs)
+            {
+                Auction auction = _mapper.Map<Auction>(auctionDb);
+                IEnumerable<Bid> bids = auctionDb.BidDbs.Select(_mapper.Map<Bid>);
+                auction.AddBids(bids);
+                auctions.Add(auction);
+            }
+            return auctions;
         }
 
         public Auction GetAuctionById(int id)
@@ -68,7 +78,7 @@ namespace lab2.Persistence
 
             foreach (BidDb bidDb in adb.BidDbs)
             {
-                auction.addBid(_mapper.Map<Bid>(bidDb));
+                auction.AddBid(_mapper.Map<Bid>(bidDb));
             }
 
             return auction;
@@ -84,7 +94,7 @@ namespace lab2.Persistence
             if (adb != null)
             {
                 _mapper.Map(auction, adb);
-                var newBid = auction.Bids.Last();
+                var newBid = auction.GetLastBid();
                 var newBidDb = _mapper.Map<BidDb>(newBid);
                 adb.BidDbs.Add(newBidDb);
                 _dbContext.SaveChanges();

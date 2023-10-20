@@ -28,7 +28,7 @@
 
 		public Auction () {}
 
-        public void addBid(Bid bid)
+        public void AddBid(Bid bid)
 		{
 			_bids.Add(bid);
 		}
@@ -37,11 +37,11 @@
         {
             foreach (var bid in bids)
             {
-                addBid(bid);
+                AddBid(bid);
             }
         }
 
-        public bool isCompleted()
+        public bool IsCompleted()
 		{
 			return DateTime.Now >= EndDate;
 		}
@@ -57,6 +57,11 @@
 			}
 			return amount > currentHighestBid;
         }
+
+		public Bid GetLastBid()
+		{
+			return _bids.Last();
+		}
     }
 }
 

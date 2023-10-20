@@ -143,7 +143,7 @@ namespace lab2.Controllers
 
             };
 
-            auction.addBid(bid);
+            auction.AddBid(bid);
             _auctionService.MakeBid(auction);
             return RedirectToAction(nameof(Details), new { id = auction.Id });
         }

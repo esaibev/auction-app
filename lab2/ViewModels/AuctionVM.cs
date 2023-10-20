@@ -28,7 +28,7 @@ namespace lab2.ViewModels
                 Auctioneer = auction.Auctioneer,
                 StartingPrice = auction.StartingPrice,
                 EndDate = auction.EndDate,
-                IsCompleted = auction.isCompleted(),
+                IsCompleted = auction.IsCompleted(),
                 HighestBid = highestBid
             };  
 
