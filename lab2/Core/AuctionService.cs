@@ -35,6 +35,11 @@ namespace lab2.Core
             return _auctionPersistence.GetAuctionById(id);
         }
 
+        public List<Auction> GetWonAuctions(string username)
+        {
+            return _auctionPersistence.GetWonAuctions(username);
+        }
+
         public void MakeBid(Auction auction)
         {
             if (auction == null) throw new InvalidDataException();

@@ -11,14 +11,13 @@ namespace lab2.ViewModels
         public int StartingPrice { get; set; }
         public DateTime EndDate { get; set; }
         public int HighestBid { get; set; }
+        public string Winner { get; set; }
 
-        public bool IsCompleted { get; set; }
         public List<BidVM> Bids { get; set; } = new List<BidVM>();
 
         public static AuctionVM FromAuction(Auction auction)
         {
             var highestBid = auction.Bids.DefaultIfEmpty(null).Max(b => b?.Amount ?? 0);
-            //var highestBid = auction.Bids.Any() ? auction.Bids.Max(b => b.Amount) : 0;
 
             var auctionVM = new AuctionVM()
             {
@@ -28,8 +27,8 @@ namespace lab2.ViewModels
                 Auctioneer = auction.Auctioneer,
                 StartingPrice = auction.StartingPrice,
                 EndDate = auction.EndDate,
-                IsCompleted = auction.IsCompleted(),
-                HighestBid = highestBid
+                HighestBid = highestBid,
+                Winner = auction.Winner
             };  
 
             foreach(var bid in auction.Bids)

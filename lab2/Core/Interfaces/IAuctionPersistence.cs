@@ -8,6 +8,7 @@
         void UpdateAuction(Auction auction);
         void MakeBid(Auction auction);
         List<Auction> GetActiveAuctionsByBidder(string bidderName);
+        List<Auction> GetWonAuctions(string username);
     }
 }
 

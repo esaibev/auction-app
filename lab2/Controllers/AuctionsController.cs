@@ -1,14 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using lab2.Core;
 using lab2.Core.Interfaces;
 using lab2.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using lab2.Persistence;
 
 namespace lab2.Controllers
 {
@@ -72,7 +66,8 @@ namespace lab2.Controllers
                     Description = vm.Description,
                     StartingPrice = vm.StartingPrice,
                     EndDate = vm.EndDate,
-                    Auctioneer = User.Identity.Name
+                    Auctioneer = User.Identity.Name,
+                    Winner = ""
                 };
                 
                 _auctionService.AddAuction(auction);
@@ -117,17 +112,17 @@ namespace lab2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult MakeBid(int auctionId, int bidAmount)
         {
+            // TODO: Check if the db fetch below really is necessary
             var auction = _auctionService.GetAuctionById(auctionId);
 
             if (auction == null)
-            {
                 return NotFound("Auction not found.");
-            }
 
             if (auction.Auctioneer.Equals(User.Identity.Name))
-            {
                 return BadRequest("Cannot bid on your own auction.");
-            }
+
+            if (auction.EndDate < DateTime.Now)
+                return BadRequest("Bids cannot be made on a completed auction.");
 
             if (!auction.BidIsValid(bidAmount))
             {
@@ -152,6 +147,18 @@ namespace lab2.Controllers
         public ActionResult ActiveBids()
         {
             List<Auction> auctions = _auctionService.GetActiveAuctionsByBidder(User.Identity.Name);
+            List<AuctionVM> auctionVMs = new();
+            foreach (var auction in auctions)
+            {
+                auctionVMs.Add(AuctionVM.FromAuction(auction));
+            }
+            return View(auctionVMs);
+        }
+
+        // GET: Auctions/WonAuctions
+        public ActionResult WonAuctions()
+        {
+            List<Auction> auctions = _auctionService.GetWonAuctions(User.Identity.Name);
             List<AuctionVM> auctionVMs = new();
             foreach (var auction in auctions)
             {

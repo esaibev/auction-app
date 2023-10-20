@@ -11,8 +11,8 @@ using lab2.Areas.Identity.Data;
 namespace lab2.Migrations.AuctionAppIdentity
 {
     [DbContext(typeof(AuctionAppIdentityContext))]
-    [Migration("20231015143205_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20231020115916_AuctionIdentity")]
+    partial class AuctionIdentity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

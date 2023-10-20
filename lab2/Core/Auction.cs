@@ -8,11 +8,12 @@
         public string Auctioneer { get; set; }
 		public int StartingPrice { get; set; }
 		public DateTime EndDate { get; set; }
+        public string Winner { get; set; }
 
-		private List<Bid> _bids = new List<Bid>();
+        private List<Bid> _bids = new List<Bid>();
 		public IEnumerable<Bid> Bids => _bids;
 
-		public Auction(int id, string name, string descr, string auctioneer, int startingPrice, DateTime endDate)
+		public Auction(int id, string name, string descr, string auctioneer, int startingPrice, DateTime endDate, string winner)
 		{
 			Id = id;
 			Name = name;
@@ -20,10 +21,11 @@
 			Auctioneer = auctioneer;
 			StartingPrice = startingPrice;
 			EndDate = endDate;
+			Winner = winner;
 		}
 
         public Auction(int id, string name, string auctioneer, int startingPrice, DateTime endDate)
-			: this(id, name, "", auctioneer, startingPrice, endDate)
+			: this(id, name, "", auctioneer, startingPrice, endDate, "")
         { }
 
 		public Auction () {}
@@ -41,11 +43,6 @@
             }
         }
 
-        public bool IsCompleted()
-		{
-			return DateTime.Now >= EndDate;
-		}
-
         public bool BidIsValid(int amount)
         {
 			if (amount < StartingPrice) return false;
@@ -60,7 +57,11 @@
 
 		public Bid GetLastBid()
 		{
-			return _bids.Last();
+            if (!_bids.Any())
+            {
+                throw new InvalidOperationException("There are no bids yet.");
+            }
+            return _bids.Last();
 		}
     }
 }

@@ -84,6 +84,26 @@ namespace lab2.Persistence
             return auction;
         }
 
+        public List<Auction> GetWonAuctions(string username)
+        {
+            var auctionDbs = _dbContext.AuctionDbs
+                .Include(a => a.BidDbs)
+                .Where(a => a.Winner == username)
+                .OrderBy(a => a.EndDate)
+                .ToList();
+
+            List<Auction> auctions = new();
+
+            foreach (var auctionDb in auctionDbs)
+            {
+                Auction auction = _mapper.Map<Auction>(auctionDb);
+                IEnumerable<Bid> bids = auctionDb.BidDbs.Select(_mapper.Map<Bid>);
+                auction.AddBids(bids);
+                auctions.Add(auction);
+            }
+            return auctions;
+        }
+
         public void MakeBid(Auction auction)
         {
             var adb = _dbContext.AuctionDbs

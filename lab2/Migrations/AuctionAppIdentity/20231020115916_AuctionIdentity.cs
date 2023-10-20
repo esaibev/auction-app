@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace lab2.Migrations.AuctionAppIdentity
 {
-    public partial class InitialCreate : Migration
+    public partial class AuctionIdentity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

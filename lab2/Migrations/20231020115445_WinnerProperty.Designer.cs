@@ -11,8 +11,8 @@ using lab2.Persistence;
 namespace lab2.Migrations
 {
     [DbContext(typeof(AuctionDbContext))]
-    [Migration("20231015143017_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20231020115445_WinnerProperty")]
+    partial class WinnerProperty
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,6 +46,11 @@ namespace lab2.Migrations
                     b.Property<int>("StartingPrice")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Winner")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("AuctionDbs");
@@ -54,11 +59,32 @@ namespace lab2.Migrations
                         new
                         {
                             Id = -1,
-                            Auctioneer = "Foo",
-                            Description = "Test description",
+                            Auctioneer = "esaiasb@kth.se",
+                            Description = "An antique guitar",
                             EndDate = new DateTime(2023, 12, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Default title",
-                            StartingPrice = 125
+                            Name = "Guitar",
+                            StartingPrice = 125,
+                            Winner = ""
+                        },
+                        new
+                        {
+                            Id = -2,
+                            Auctioneer = "esaiasb@kth.se",
+                            Description = "Belonged to Elton John",
+                            EndDate = new DateTime(2023, 10, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Piano",
+                            StartingPrice = 500,
+                            Winner = "testuser@test.com"
+                        },
+                        new
+                        {
+                            Id = -3,
+                            Auctioneer = "testuser@test.com",
+                            Description = "In good condition",
+                            EndDate = new DateTime(2023, 12, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Saxophone",
+                            StartingPrice = 300,
+                            Winner = ""
                         });
                 });
 
@@ -94,7 +120,7 @@ namespace lab2.Migrations
                             Id = -1,
                             Amount = 150,
                             AuctionDbId = -1,
-                            Bidder = "SampleBid1",
+                            Bidder = "testuser@test.com",
                             DateMade = new DateTime(2023, 10, 14, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -102,8 +128,16 @@ namespace lab2.Migrations
                             Id = -2,
                             Amount = 170,
                             AuctionDbId = -1,
-                            Bidder = "SampleBid2",
+                            Bidder = "testuser@test.com",
                             DateMade = new DateTime(2023, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = -3,
+                            Amount = 600,
+                            AuctionDbId = -2,
+                            Bidder = "testuser@test.com",
+                            DateMade = new DateTime(2023, 10, 16, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
