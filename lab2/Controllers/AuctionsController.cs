@@ -112,35 +112,15 @@ namespace lab2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult MakeBid(int auctionId, int bidAmount)
         {
-            // TODO: Check if the db fetch below really is necessary
-            var auction = _auctionService.GetAuctionById(auctionId);
-
-            if (auction == null)
-                return NotFound("Auction not found.");
-
-            if (auction.Auctioneer.Equals(User.Identity.Name))
-                return BadRequest("Cannot bid on your own auction.");
-
-            if (auction.EndDate < DateTime.Now)
-                return BadRequest("Bids cannot be made on a completed auction.");
-
-            if (!auction.BidIsValid(bidAmount))
+            try
             {
-                TempData["BidErrorMessage"] = "Bid amount must be higher than the starting price and the current highest bid.";
-                return RedirectToAction(nameof(Details), new { id = auctionId });
+                _auctionService.MakeBid(auctionId, User.Identity.Name, bidAmount);
             }
-
-            Bid bid = new Bid()
+            catch (InvalidOperationException e)
             {
-                Bidder = User.Identity.Name,
-                Amount = bidAmount,
-                DateMade = DateTime.Now,
-
-            };
-
-            auction.AddBid(bid);
-            _auctionService.MakeBid(auction);
-            return RedirectToAction(nameof(Details), new { id = auction.Id });
+                TempData["BidErrorMessage"] = e.Message;
+            }
+            return RedirectToAction(nameof(Details), new { id = auctionId });
         }
 
         // GET: Auctions/ActiveBids

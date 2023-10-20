@@ -40,9 +40,30 @@ namespace lab2.Core
             return _auctionPersistence.GetWonAuctions(username);
         }
 
-        public void MakeBid(Auction auction)
+        public void MakeBid(int auctionId, string bidderName, int bidAmount)
         {
-            if (auction == null) throw new InvalidDataException();
+            var auction = _auctionPersistence.GetAuctionById(auctionId);
+
+            if (auction == null)
+                throw new InvalidOperationException("Auction not found.");
+
+            if (auction.Auctioneer.Equals(bidderName))
+                throw new InvalidOperationException("Cannot bid on your own auction.");
+
+            if (auction.EndDate < DateTime.Now)
+                throw new InvalidOperationException("Bids cannot be made on a completed auction.");
+
+            if (!auction.BidIsValid(bidAmount))
+                throw new InvalidOperationException("Bid amount must be higher than the starting price and the current highest bid.");
+
+            Bid bid = new Bid()
+            {
+                Bidder = bidderName,
+                Amount = bidAmount,
+                DateMade = DateTime.Now,
+            };
+
+            auction.AddBid(bid);
             _auctionPersistence.MakeBid(auction);
         }
 
