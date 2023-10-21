@@ -17,7 +17,7 @@ namespace lab2.ViewModels
 
         public static AuctionVM FromAuction(Auction auction)
         {
-            var highestBid = auction.Bids.DefaultIfEmpty(null).Max(b => b?.Amount ?? 0);
+            var highestBid = auction.Bids.Any() ? auction.Bids.Max(b => b.Amount) : 0;
 
             var auctionVM = new AuctionVM()
             {

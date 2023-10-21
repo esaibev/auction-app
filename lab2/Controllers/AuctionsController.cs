@@ -39,6 +39,10 @@ namespace lab2.Controllers
             {
                 ModelState.AddModelError("", TempData["BidErrorMessage"].ToString());
             }
+
+            // Store the URL of the previous page the user was on. Used for "Go back" link.
+            ViewData["Referer"] = Request.Headers["Referer"].ToString();
+
             return View(auctionVM);
         }
 
@@ -146,30 +150,5 @@ namespace lab2.Controllers
             }
             return View(auctionVMs);
         }
-
-        /*
-        // GET: Auctions/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Auctions/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-        */
     }
 }
