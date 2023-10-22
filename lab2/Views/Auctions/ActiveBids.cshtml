@@ -54,7 +54,7 @@
                     }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.EndDate)
+                    @Convert.ToDateTime(item.EndDate).ToString("yyyy-MM-dd HH:mm")
                 </td>
                 <td><a asp-action="Details" asp-route-id="@item.Id">View Details</a></td>
             </tr>
