@@ -73,6 +73,13 @@ namespace lab2.Persistence
 
             if (adb == null) return null;
 
+            // Set winner if it hasn't been set yet
+            if (adb.EndDate <= DateTime.Now && string.IsNullOrEmpty(adb.Winner))
+            {
+                SetWinnerForCompletedAuction(adb);
+                _dbContext.SaveChanges();
+            }
+
             adb.BidDbs = adb.BidDbs.OrderByDescending(b => b.Amount).ToList();
             Auction auction = _mapper.Map<Auction>(adb);
 
@@ -86,41 +93,72 @@ namespace lab2.Persistence
 
         public List<Auction> GetWonAuctions(string username)
         {
-            var auctionDbs = _dbContext.AuctionDbs
-                .Include(a => a.BidDbs)
-                .Where(a => a.Winner == username)
-                .OrderBy(a => a.EndDate)
-                .ToList();
-
             List<Auction> auctions = new();
 
-            foreach (var auctionDb in auctionDbs)
+            using (var dbContextTransaction = _dbContext.Database.BeginTransaction())
             {
-                Auction auction = _mapper.Map<Auction>(auctionDb);
-                IEnumerable<Bid> bids = auctionDb.BidDbs.Select(_mapper.Map<Bid>);
-                auction.AddBids(bids);
-                auctions.Add(auction);
+                try
+                {
+                    // Ensure winners are set for completed auctions
+                    SetWinnersForCompletedAuctions();
+
+                    var auctionDbs = _dbContext.AuctionDbs
+                        .Include(a => a.BidDbs)
+                        .Where(a => a.Winner == username)
+                        .OrderBy(a => a.EndDate)
+                        .ToList();
+
+                    _dbContext.SaveChanges();
+                    dbContextTransaction.Commit();
+
+                    foreach (var auctionDb in auctionDbs)
+                    {
+                        Auction auction = _mapper.Map<Auction>(auctionDb);
+                        IEnumerable<Bid> bids = auctionDb.BidDbs.Select(_mapper.Map<Bid>);
+                        auction.AddBids(bids);
+                        auctions.Add(auction);
+                    }
+                }
+                catch (Exception)
+                {
+                    dbContextTransaction.Rollback();
+                    throw;
+                }
             }
+
             return auctions;
         }
 
         public void MakeBid(Auction auction)
         {
-            var adb = _dbContext.AuctionDbs
-                .Include(a => a.BidDbs)
-                .Where(a => a.Id == auction.Id)
-                .SingleOrDefault();
-
-            if (adb != null)
+            using (var dbContextTransaction = _dbContext.Database.BeginTransaction())
             {
-                _mapper.Map(auction, adb);
-                var newBid = auction.GetLastBid();
-                var newBidDb = _mapper.Map<BidDb>(newBid);
-                adb.BidDbs.Add(newBidDb);
-                _dbContext.SaveChanges();
+                try
+                {
+                    var adb = _dbContext.AuctionDbs
+                        .Include(a => a.BidDbs)
+                        .Where(a => a.Id == auction.Id)
+                        .SingleOrDefault();
+
+                    if (adb != null)
+                    {
+                        _mapper.Map(auction, adb);
+                        var newBid = auction.GetLastBid();
+                        var newBidDb = _mapper.Map<BidDb>(newBid);
+                        adb.BidDbs.Add(newBidDb);
+
+                        _dbContext.SaveChanges();
+                        dbContextTransaction.Commit();
+                    }
+                    else throw new ArgumentException("Auction id " + auction.Id +
+                        " cannot be found in the database.");
+                }
+                catch (Exception)
+                {
+                    dbContextTransaction.Rollback();
+                    throw;
+                }
             }
-            else throw new ArgumentException("Auction id " + auction.Id +
-                " cannot be found in the database.");
         }
 
         public void UpdateAuction(Auction auction)
@@ -133,6 +171,26 @@ namespace lab2.Persistence
             }
             else throw new ArgumentException("Auction id " + auction.Id +
                 " cannot be found in the database.");
+        }
+
+        private void SetWinnerForCompletedAuction(AuctionDb adb)
+        {
+            if (adb.BidDbs.Any())
+            {
+                var highestBid = adb.BidDbs.OrderByDescending(b => b.Amount).First();
+                adb.Winner = highestBid.Bidder;
+            }
+        }
+
+        private void SetWinnersForCompletedAuctions()
+        {
+            var completedAuctions = _dbContext.AuctionDbs
+                .Where(a => a.EndDate <= DateTime.Now && string.IsNullOrEmpty(a.Winner))
+                .Include(a => a.BidDbs)
+                .ToList();
+
+            foreach (var auctionDb in completedAuctions)
+                SetWinnerForCompletedAuction(auctionDb);
         }
     }
 }

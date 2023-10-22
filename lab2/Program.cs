@@ -2,7 +2,6 @@ using lab2.Core;
 using lab2.Core.Interfaces;
 using lab2.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using lab2.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
