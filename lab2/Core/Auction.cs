@@ -8,12 +8,12 @@
         public string Auctioneer { get; set; }
 		public int StartingPrice { get; set; }
 		public DateTime EndDate { get; set; }
-        public string Winner { get; set; }
+        public string Winner => Bids.OrderByDescending(b => b.Amount).FirstOrDefault()?.Bidder ?? "";
 
         private List<Bid> _bids = new List<Bid>();
 		public IEnumerable<Bid> Bids => _bids;
 
-		public Auction(int id, string name, string descr, string auctioneer, int startingPrice, DateTime endDate, string winner)
+		public Auction(int id, string name, string descr, string auctioneer, int startingPrice, DateTime endDate)
 		{
 			Id = id;
 			Name = name;
@@ -21,11 +21,10 @@
 			Auctioneer = auctioneer;
 			StartingPrice = startingPrice;
 			EndDate = endDate;
-			Winner = winner;
 		}
 
         public Auction(int id, string name, string auctioneer, int startingPrice, DateTime endDate)
-			: this(id, name, "", auctioneer, startingPrice, endDate, "")
+			: this(id, name, "", auctioneer, startingPrice, endDate)
         { }
 
 		public Auction () {}

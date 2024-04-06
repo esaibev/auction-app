@@ -11,9 +11,8 @@ namespace lab2.ViewModels
         public int StartingPrice { get; set; }
         public DateTime EndDate { get; set; }
         public int HighestBid { get; set; }
-        public string Winner { get; set; }
-
         public List<BidVM> Bids { get; set; } = new List<BidVM>();
+        public string Winner { get; set; }
 
         public static AuctionVM FromAuction(Auction auction)
         {

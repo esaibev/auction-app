@@ -48,4 +48,3 @@
         List<Auction> GetWonAuctions(string username);
     }
 }
-

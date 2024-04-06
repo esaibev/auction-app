@@ -24,7 +24,6 @@ namespace lab2.Persistence
                 Auctioneer = "esaiasb@kth.se",
                 StartingPrice = 125,
                 EndDate = new DateTime(2023,12,21),
-                Winner = ""
             };
 
             var auction2 = new AuctionDb
@@ -35,7 +34,6 @@ namespace lab2.Persistence
                 Auctioneer = "esaiasb@kth.se",
                 StartingPrice = 500,
                 EndDate = new DateTime(2023, 10, 17),
-                Winner = "testuser@test.com"
             };
 
             var auction3 = new AuctionDb
@@ -46,7 +44,6 @@ namespace lab2.Persistence
                 Auctioneer = "testuser@test.com",
                 StartingPrice = 300,
                 EndDate = new DateTime(2023, 12, 15),
-                Winner = ""
             };
 
             // Add bid to auction 1

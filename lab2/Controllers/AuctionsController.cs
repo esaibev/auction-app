@@ -40,9 +40,6 @@ namespace lab2.Controllers
                 ModelState.AddModelError("", TempData["BidErrorMessage"].ToString());
             }
 
-            // Store the URL of the previous page the user was on. Used for "Go back" link.
-            ViewData["Referer"] = Request.Headers["Referer"].ToString();
-
             return View(auctionVM);
         }
 
@@ -71,7 +68,6 @@ namespace lab2.Controllers
                     StartingPrice = vm.StartingPrice,
                     EndDate = vm.EndDate,
                     Auctioneer = User.Identity.Name,
-                    Winner = ""
                 };
                 
                 _auctionService.AddAuction(auction);

@@ -25,10 +25,6 @@ namespace lab2.Persistence
         [DataType(DataType.DateTime)]
         public DateTime EndDate { get; set; }
 
-        [Required(AllowEmptyStrings = true)]
-        [MaxLength(64)]
-        public string Winner { get; set; }
-
         public virtual List<BidDb> BidDbs { get; set; } = new List<BidDb>();
 	}
 }
